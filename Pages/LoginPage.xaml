@@ -1,0 +1,36 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="SMA.Pages.LoginPage"
+             Title="Login Page">
+
+    <Grid BackgroundColor="#333333" 
+           Padding="10" 
+           HorizontalOptions="Center"
+           VerticalOptions="Center">
+
+        <VerticalStackLayout Padding="10" Margin="10">
+            <Label Text="Username:" Margin="10"/>
+
+            <Entry x:Name="UsernameEntry"
+       Placeholder="Enter username"  Margin="10"/>
+
+            <Label Text="Password:" Margin="10"/>
+
+            <Entry x:Name="PasswordEntry"
+       IsPassword="True"
+       Placeholder="Enter password" Margin="10"/>
+
+            <Label x:Name="ExplanationLabel"
+       FontSize="12"
+       TextColor="Gray"
+       Text="This will activate Steam Desktop Authenticator on your account." Margin="10" />
+
+            <Button x:Name="LoginButton"
+        Text="Login"
+        Clicked="BtnSteamLogin_Clicked" Margin="10"/>
+        </VerticalStackLayout>
+        
+
+    </Grid>
+</ContentPage>

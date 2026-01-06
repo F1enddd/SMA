@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SMA.Pages.ListInputPage"
+             Title="Select one">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Select an item:"
+               FontSize="18"
+               HorizontalOptions="Center" />
+
+        <CollectionView x:Name="ItemsList"
+                        SelectionMode="Single"
+                        HeightRequest="150">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10">
+                        <Label Text="{Binding}" FontSize="16"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+            <Button Text="Accept"
+                    Clicked="OnAcceptClicked"
+                    WidthRequest="120"/>
+
+            <Button Text="Cancel"
+                    Clicked="OnCancelClicked"
+                    WidthRequest="120"/>
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentPage>

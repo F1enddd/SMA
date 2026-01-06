@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SMA.Pages.WelcomePage"
+             Title="Steam Mobile Authenticator">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="Добро пожаловать в&#x0a;Steam Mobile Authenticator"
+                   FontSize="26"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="White" />
+
+            <Label Text="Выберите, чтобы начать"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="LightGray" />
+
+            <Button Text="Импортировать мои аккаунты"
+                    x:Name="btnImportConfig"
+                    Clicked="OnImportClicked"
+                    FontSize="14"
+                    Padding="10"
+                    BackgroundColor="#3366CC"
+                    TextColor="White"
+                    CornerRadius="10" />
+
+            <Button Text="Это мой первый раз - я хочу зарегестрироваться"
+                    x:Name="btnJustStart"
+                    Clicked="OnJustStartClicked"
+                    FontSize="14"
+                    Padding="10"
+                    BackgroundColor="#339933"
+                    TextColor="White"
+                    CornerRadius="10" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

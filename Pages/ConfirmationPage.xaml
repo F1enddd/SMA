@@ -1,0 +1,24 @@
+<ContentPage 
+    x:Class="SMA.Pages.ConfirmationPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SMA.Controls"
+    Title="Trade Confirmations">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Button
+            x:Name="RefreshButton"
+            Text="Refresh"
+            HeightRequest="50"
+            Clicked="OnRefreshClicked"/>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout
+                x:Name="ConfirmationsContainer"
+                Padding="10"
+                Spacing="10"/>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

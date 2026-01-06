@@ -1,0 +1,27 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SMA.Pages.ImportAccountPage"
+             Title="Import Account">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+
+        <Label Text="Enter your encryption passkey if your .maFile is encrypted:" />
+
+        <Entry x:Name="PasskeyEntry"
+               IsPassword="True"
+               Placeholder="Encryption key (optional)" />
+
+        <Label Text="If you import an encrypted .maFile, the manifest file must be next to it."
+               FontSize="12"
+               TextColor="Gray" />
+
+        <Button Text="Select .maFile to Import"
+                Clicked="OnImportClicked" />
+
+        <Button Text="Cancel"
+                Clicked="OnCancelClicked"
+                BackgroundColor="DarkRed"
+                TextColor="White"/>
+
+    </VerticalStackLayout>
+</ContentPage>

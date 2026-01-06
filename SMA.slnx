@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="lib/SteamAuth/SteamAuth/SteamAuth.csproj" />
+  <Project Path="SMA.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>

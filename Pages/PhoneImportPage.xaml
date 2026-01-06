@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SMA.Pages.PhoneImportPage"
+             Title="PhoneImportPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Your Steam account requires a phone number to add a mobile authenticator. 
+This phone number must be able to receieve SMS. 
+VoIP and virtual phone numbers are not supported."
+            Margin="10, 0,0,0"
+            VerticalOptions="Center" 
+            HorizontalOptions="Start" />
+
+        <Label Margin="10, 30, 0, 0" HorizontalOptions="Start" Text="Two letter country code of the phone number:"/>
+        <Entry Placeholder="+..." HorizontalOptions="Start" Margin="10, 0, 0, 10" WidthRequest="50" x:Name="txtCountryCode" Keyboard="Telephone" TextChanged="txtCountryCode_TextChanged"/>
+        <Label Text="Phone Number:" Margin="10, 0, 0, 10" HorizontalOptions="Start"/>
+        <Entry Placeholder="+1 0000000000" Margin="10, 0, 0, 0" HorizontalOptions="Start" WidthRequest="150" x:Name="txtPhoneNumber" TextChanged="Entry_TextChanged"/>
+        <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="10, 20, 10, 0" VerticalOptions="End">
+            <Button Grid.Column="0" Text="Submit" x:Name="ButtonSubmit" Clicked="ButtonSubmit_Clicked"/>
+            <Button Grid.Column="1" Text="Cancel" x:Name="ButtonCancel" Clicked="ButtonCancel_Clicked"/>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

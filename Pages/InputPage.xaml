@@ -1,0 +1,26 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SMA.Pages.InputPage"
+             Padding="20">
+    <VerticalStackLayout Spacing="20">
+
+        <Label x:Name="LabelText"
+               FontSize="18"
+               TextColor="Black"
+               LineBreakMode="WordWrap"/>
+
+        <Entry x:Name="InputBox"
+               FontSize="18"
+               IsPassword="False"/>
+
+        <HorizontalStackLayout Spacing="20">
+            <Button Text="Accept"
+                    Clicked="OnAcceptClicked"
+                    />
+            <Button Text="Cancel"
+                    Clicked="OnCancelClicked"
+                    />
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+</ContentPage>
