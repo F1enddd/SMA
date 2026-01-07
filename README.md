@@ -50,13 +50,4 @@ README_EN: - https://github.com/F1enddd/SMA/blob/master/README_EN.MD
 
 Разрешите установку из неизвестных источников, если потребуется.
 
----
-![Uploading image.png…]()![Uploading image.png…]()![Uploading image.png…]()
-
-
-## 📸 Скриншоты
-
-
-
----
 
