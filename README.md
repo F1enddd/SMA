@@ -41,7 +41,7 @@ README_EN: - https://github.com/F1enddd/SMA/blob/master/README_EN.MD
 ## 📥 Установка
 
 ### 🟦 Windows
-Скачайте **SMA-Beta0.9-Release.exe** из раздела Releases и установите приложение.
+Скачайте `SMA-Beta0.9-Release.exe` из раздела Releases и установите приложение.
 
 ### 🟩 Android
 Скачайте **APK**:
