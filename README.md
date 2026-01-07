@@ -3,6 +3,8 @@
 Кроссплатформенное приложение на .NET MAUI для управления Steam Guard, подтверждений трейдов и работы с maFile.  
 Поддерживает **Windows** и **Android**, полностью автономно и не требует браузера или сторонних сервисов.
 
+README_EN: - https://github.com/F1enddd/SMA/blob/master/README_EN.MD
+
 # SDA
 
 Данный репозиторий является портом на современный MAUI репозитория https://github.com/Jessecar96/SteamDesktopAuthenticator
