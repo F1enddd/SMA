@@ -40,7 +40,7 @@ Some parts of the codebase are reused, while the rest is written manually from s
 ## 📥 Installation
 
 ### 🟦 Windows
-Download **SMA-Beta0.9-Release.exe** from the Releases section and install the application.
+Download `com.f1enddd.sma-Signed.apk` from the Releases section and install the application.
 
 ### 🟩 Android
 Download the **APK**:
