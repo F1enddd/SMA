@@ -6,7 +6,6 @@
 
         <Label x:Name="LabelText"
                FontSize="18"
-               TextColor="Black"
                LineBreakMode="WordWrap"/>
 
         <Entry x:Name="InputBox"

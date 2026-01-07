@@ -37,6 +37,14 @@
                     TextColor="White"
                     CornerRadius="10" />
 
+            <ImageButton
+                Source="git.png"
+                WidthRequest="100"
+                HeightRequest="100"
+                BackgroundColor="Transparent"
+                Clicked="OnIconClicked" Margin="0, 20, 0, 0"/>
+
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

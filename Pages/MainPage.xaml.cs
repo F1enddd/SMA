@@ -10,7 +10,7 @@ namespace SMA.Pages;
 
 public partial class MainPage : ContentPage
 {
-    private SteamGuardAccount? currentAccount;
+    private SteamGuardAccount currentAccount;
     private ObservableCollection<SteamGuardAccount> accounts = new();
     private Manifest manifest;
     private string? passKey;
@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
     private CancellationTokenSource? tokenSource;
 
     private TradePopupPage popupFrm = new TradePopupPage();
-    private SettingsPopup popupSett = new SettingsPopup();
+    private SettingsPopup popupSett;
 
 
 
@@ -189,7 +189,7 @@ public partial class MainPage : ContentPage
                 await GoToSettings();
                 break;
             case "Login Again":
-                await DisplayAlertAsync("Login Again", "TODO: Implement login again", "OK");
+                await PromptRefreshLogin(currentAccount);
                 break;
             case "Remove From Manifest":
                 if (manifest.Encrypted)
@@ -208,11 +208,95 @@ public partial class MainPage : ContentPage
                 }
                 break;
             case "Deactivate Authenticator":
-                await DisplayAlert("Deactivate", "TODO: Implement deactivate", "OK");
+                await DeactivateAuthentikator();
                 break;
         }
     }
+    private async Task DeactivateAuthentikator()
+    {
+        if (currentAccount == null) return;
 
+        // Check for a valid refresh token first
+        if (currentAccount.Session.IsRefreshTokenExpired())
+        {
+            await DisplayAlertAsync("Deactivate Authenticator", "Your session has expired. Use the login again button under the selected account menu.", "OK");
+            return;
+        }
+
+        // Check for a valid access token, refresh it if needed
+        if (currentAccount.Session.IsAccessTokenExpired())
+        {
+            try
+            {
+                await currentAccount.Session.RefreshAccessToken();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync("Deactivate Authenticator Error", ex.Message,  "OK");
+                return;
+            }
+        }
+
+        string res = await DisplayActionSheetAsync(
+            $"Deactivate Authenticator: {currentAccount.AccountName}",
+            "Cancel",
+            null,
+            "Yes - Remove Steam Guard completely",
+            "No - Switch back to Email authentication");
+        int scheme = 0;
+        if (res == "Yes - Remove Steam Guard completely")
+        {
+            scheme = 2;
+        }
+        else if (res == "No - Switch back to Email authentication")
+        {
+            scheme = 1;
+        }
+        else if (res == "Cancel")
+        {
+            scheme = 0;
+        }
+
+        if (scheme != 0)
+        {
+            string confCode = currentAccount.GenerateSteamGuardCode();
+            InputPage confirmationDialog = new InputPage(String.Format("Removing Steam Guard from {0}. Enter this confirmation code: {1}", currentAccount.AccountName, confCode));
+            Navigation.PushAsync(confirmationDialog);
+            var result = await confirmationDialog.ShowAsync();
+
+            if (result == null)
+            {
+                return;
+            }
+
+            string enteredCode = confirmationDialog.GetText().ToUpper();
+            if (enteredCode != confCode)
+            {
+                await DisplayAlertAsync("Error","Confirmation codes do not match. Steam Guard not removed.","OK");
+                return;
+            }
+
+            bool success = await currentAccount.DeactivateAuthenticator(scheme);
+            if (success)
+            {
+                await DisplayAlertAsync(
+                scheme == 2 ? "Removed completely" : "Switched to emails",
+                $"Steam Guard {(scheme == 2 ? "removed completely" : "switched to emails")}. maFile will be deleted after hitting OK. If you need to make a backup, now's the time.",
+                "OK");
+
+                this.manifest.RemoveAccount(currentAccount);
+                this.LoadAccountsList();
+            }
+            else
+            {
+                await DisplayAlertAsync("Error", "Steam Guard failed to deactivate.", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlertAsync("Error", "Steam Guard was not removed. No action was taken.", "OK");
+        }
+    }
     private async Task ImportAccountAsync()
     {
         await Navigation.PushAsync(new ImportAccountPage());
@@ -222,9 +306,25 @@ public partial class MainPage : ContentPage
     }
     private async Task GoToSettings()
     {
-        await this.ShowPopupAsync(popupSett);
+        await this.ShowPopupAsync(new SettingsPopup(this));
         manifest = Manifest.GetManifest(true);
         LoadSettings();
+    }
+
+    private async Task PromptRefreshLogin(SteamGuardAccount account)
+    {
+        var loginForm = new LoginPage(LoginPage.LoginType.Refresh, account);
+        Navigation.PushAsync(loginForm);
+    }
+
+    private string[] getAllNames()
+    {
+        string[] itemArray = new string[accounts.Count];
+        for (int i = 0; i < itemArray.Length; i++)
+        {
+            itemArray[i] = accounts[i].AccountName;
+        }
+        return itemArray;
     }
 
     private void LoadSettings()
@@ -239,11 +339,7 @@ public partial class MainPage : ContentPage
             timerTradesPopup.Start();
     }
 
-    private async void PromptRefreshLogin(SteamGuardAccount account)
-    {
-        var loginPage = new LoginPage(LoginPage.LoginType.Refresh, account);
-        await Navigation.PushModalAsync(loginPage);
-    }
+
 
     private async void TimerTradesPopup_Tick(object sender, EventArgs e)
     {
@@ -268,7 +364,7 @@ public partial class MainPage : ContentPage
 
                 if (acc.Session.IsRefreshTokenExpired())
                 {
-                    await DisplayAlert("Trade Confirmations", "Your session for account " + acc.AccountName + " has expired. You will be prompted to login again.", "OK");
+                    await DisplayAlertAsync("Trade Confirmations", "Your session for account " + acc.AccountName + " has expired. You will be prompted to login again.", "OK");
                     PromptRefreshLogin(acc);
                     break;
                 }
@@ -283,7 +379,7 @@ public partial class MainPage : ContentPage
                     }
                     catch (Exception ex)
                     {
-                        await DisplayAlert("Steam Login Error", ex.Message, "OK");
+                        await DisplayAlertAsync("Steam Login Error", ex.Message, "OK");
                         break;
                     }
                 }
@@ -347,9 +443,68 @@ public partial class MainPage : ContentPage
         await Navigation.PushAsync(new LoginPage());
     }
 
-    private void OnManageEncryptionClicked(object sender, EventArgs e)
+    private async void OnManageEncryptionClicked(object sender, EventArgs e)
     {
-        // TODO: реализовать popup для смены пароля
+        if (manifest.Encrypted)
+        {
+            InputPage currentPassKeyForm = new InputPage("Enter current passkey", true);
+            await Navigation.PushAsync(currentPassKeyForm);
+            var result = currentPassKeyForm.ShowAsync();
+            if (result == null)
+            {
+                return;
+            }
+
+            string curPassKey = currentPassKeyForm.GetText();
+
+            InputPage changePassKeyForm = new InputPage("Enter new passkey, or leave blank to remove encryption.");
+            await Navigation.PushAsync(changePassKeyForm);
+            var result1 = changePassKeyForm.ShowAsync();
+
+            if (result1 == null && !string.IsNullOrEmpty(changePassKeyForm.GetText()))
+            {
+                return;
+            }
+
+            InputPage changePassKeyForm2 = new InputPage("Confirm new passkey, or leave blank to remove encryption.");
+            await Navigation.PushAsync(changePassKeyForm2);
+            var result2 = changePassKeyForm2.ShowAsync();
+
+            if (result2 == null && !string.IsNullOrEmpty(changePassKeyForm.GetText()))
+            {
+                return;
+            }
+
+            string newPassKey = changePassKeyForm.GetText();
+            string confirmPassKey = changePassKeyForm2.GetText();
+
+            if (newPassKey != confirmPassKey)
+            {
+                await DisplayAlertAsync("Error", "Passkeys do not match.", "OK");
+                return;
+            }
+
+            if (newPassKey.Length == 0)
+            {
+                newPassKey = null;
+            }
+
+            string action = newPassKey == null ? "remove" : "change";
+            if (!manifest.ChangeEncryptionKey(curPassKey, newPassKey))
+            {
+                await DisplayAlertAsync("Error","Unable to " + action + " passkey.", "OK");
+            }
+            else
+            {
+                await DisplayAlertAsync("Error", "Passkey successfully " + action + "d.", "OK");
+                this.LoadAccountsList();
+            }
+        }
+        else
+        {
+            passKey = manifest.PromptSetupPassKey().ToString();
+            this.LoadAccountsList();
+        }
     }
 
     protected override void OnDisappearing()
@@ -357,5 +512,17 @@ public partial class MainPage : ContentPage
         base.OnDisappearing();
         tokenSource?.Cancel();
         pbTimeout.AbortAnimation("Progress");
+    }
+
+    private void ViewConfirmations_Clicked(object sender, EventArgs e)
+    {
+        if (currentAccount == null) return;
+
+        string oText = ViewConfirmations.Text;
+        ViewConfirmations.Text = "Loading...";
+        ViewConfirmations.Text = oText;
+
+        ConfirmationPage confirms = new ConfirmationPage(currentAccount);
+        Navigation.PushAsync(confirms);
     }
 }

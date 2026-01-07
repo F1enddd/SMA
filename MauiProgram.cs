@@ -31,7 +31,9 @@ namespace SMA
                 options.SetPopupOptionsDefaults(new DefaultPopupOptionsSettings
                 {
                     CanBeDismissedByTappingOutsideOfPopup = true,
+#if ANDROID
                     OnTappingOutsideOfPopup = async () => await Toast.Make("Popup Dismissed").Show(CancellationToken.None),
+#endif
                     PageOverlayColor = Colors.Black.MultiplyAlpha((float)0.5),
                     Shadow = null,
                     Shape = null

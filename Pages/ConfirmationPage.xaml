@@ -10,8 +10,7 @@
         <Button
             x:Name="RefreshButton"
             Text="Refresh"
-            HeightRequest="50"
-            Clicked="OnRefreshClicked"/>
+            Clicked="OnRefreshClicked" Margin="10"/>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout

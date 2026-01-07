@@ -72,7 +72,7 @@ namespace SMA.Pages
             catch
             {
                 _tcs.TrySetResult(false);
-                DisplayAlert("Login Failed", "Failed to find your account. Try closing and reopening the app.", "OK");
+                DisplayAlertAsync("Login Failed", "Failed to find your account. Try closing and reopening the app.", "OK");
                 Navigation.PopToRootAsync();
             }
         }
@@ -173,7 +173,7 @@ namespace SMA.Pages
             bool connected = await ConnectSteamAsync(steamClient, cbManager, 60000);
             if (!connected)
             {
-                await DisplayAlert(
+                await DisplayAlertAsync(
                     "Steam",
                     "Connection failed. Check INTERNET permission and network.",
                     "OK");
@@ -197,7 +197,7 @@ namespace SMA.Pages
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Steam Login Error", ex.Message, "OK");
+                await DisplayAlertAsync("Steam Login Error", ex.Message, "OK");
                 _tcs.TrySetResult(false);
                 await Navigation.PopAsync();
                 return;
@@ -211,7 +211,7 @@ namespace SMA.Pages
             catch (Exception ex)
             {
                 _tcs.TrySetResult(false);
-                await DisplayAlert("Steam Login Error", ex.Message, "OK");
+                await DisplayAlertAsync("Steam Login Error", ex.Message, "OK");
                 await Navigation.PopAsync();
                 return;
             }
@@ -243,7 +243,7 @@ namespace SMA.Pages
                 return;
             }
 
-            bool addAuthenticator = await DisplayAlert(
+            bool addAuthenticator = await DisplayAlertAsync(
                 "Steam Login",
                 "Steam account login succeeded. Press OK to continue adding SDA as your authenticator.",
                 "OK",
@@ -252,7 +252,7 @@ namespace SMA.Pages
 
             if (!addAuthenticator)
             {
-                await DisplayAlert("Error", "Adding authenticator aborted.", "OK");
+                await DisplayAlertAsync("Error", "Adding authenticator aborted.", "OK");
                 _tcs.TrySetResult(false);
                 ResetLoginButton();
                 return;
@@ -269,7 +269,7 @@ namespace SMA.Pages
                 }
                 catch (Exception ex)
                 {
-                    await DisplayAlert("Steam Login", "Error adding your authenticator: " + ex.Message, "OK");
+                    await DisplayAlertAsync("Steam Login", "Error adding your authenticator: " + ex.Message, "OK");
                     _tcs.TrySetResult(false);
                     ResetLoginButton();
                     return;
@@ -290,13 +290,13 @@ namespace SMA.Pages
                         break;
 
                     case AuthenticatorLinker.LinkResult.AuthenticatorPresent:
-                        await DisplayAlert("Steam Login", "This account already has an authenticator linked. You must remove that authenticator to add SDA as your authenticator.", "OK");
+                        await DisplayAlertAsync("Steam Login", "This account already has an authenticator linked. You must remove that authenticator to add SDA as your authenticator.", "OK");
                         _tcs.TrySetResult(false);
                         await Navigation.PopAsync();
                         return;
 
                     case AuthenticatorLinker.LinkResult.FailureAddingPhone:
-                        await DisplayAlert("Steam Login", "Failed to add your phone number. Please try again or use a different phone number.", "OK");
+                        await DisplayAlertAsync("Steam Login", "Failed to add your phone number. Please try again or use a different phone number.", "OK");
                         _tcs.TrySetResult(false);
                         linker.PhoneNumber = null;
                         break;
@@ -306,11 +306,11 @@ namespace SMA.Pages
                         break;
 
                     case AuthenticatorLinker.LinkResult.MustConfirmEmail:
-                        await DisplayAlert("Steam Login", "Please check your email, and click the link Steam sent you before continuing.", "OK");
+                        await DisplayAlertAsync("Steam Login", "Please check your email, and click the link Steam sent you before continuing.", "OK");
                         break;
 
                     case AuthenticatorLinker.LinkResult.GeneralFailure:
-                        await DisplayAlert("Steam Login Error", "Error adding your authenticator.", "OK");
+                        await DisplayAlertAsync("Steam Login Error", "Error adding your authenticator.", "OK");
                         _tcs.TrySetResult(false);
                         await Navigation.PopAsync();
                         return;
@@ -335,7 +335,7 @@ namespace SMA.Pages
                         passKey = passKeyForm.GetText();
                         passKeyValid = manifestFinal.VerifyPasskey(passKey);
                         if (!passKeyValid)
-                            await DisplayAlert("Error", "That passkey is invalid. Please enter the same passkey you used for your other accounts.", "OK");
+                            await DisplayAlertAsync("Error", "That passkey is invalid. Please enter the same passkey you used for your other accounts.", "OK");
                     }
                     else
                     {
@@ -349,12 +349,12 @@ namespace SMA.Pages
             if (!manifestFinal.SaveAccount(linker.LinkedAccount, passKey != null, passKey))
             {
                 manifestFinal.RemoveAccount(linker.LinkedAccount);
-                await DisplayAlert("Error", "Unable to save mobile authenticator file. The mobile authenticator has not been linked.", "OK");
+                await DisplayAlertAsync("Error", "Unable to save mobile authenticator file. The mobile authenticator has not been linked.", "OK");
                 await Navigation.PopAsync();
                 return;
             }
 
-            await DisplayAlert("Info", "The Mobile Authenticator has not yet been linked. Before finalizing the authenticator, please write down your revocation code: " + linker.LinkedAccount.RevocationCode, "OK");
+            await DisplayAlertAsync("Info", "The Mobile Authenticator has not yet been linked. Before finalizing the authenticator, please write down your revocation code: " + linker.LinkedAccount.RevocationCode, "OK");
 
             AuthenticatorLinker.FinalizeResult finalizeResponse = AuthenticatorLinker.FinalizeResult.GeneralFailure;
 
@@ -375,7 +375,7 @@ namespace SMA.Pages
                 string confirmRevocationCodestr = await confirmRevocationCode.ShowAsync();
                 if (confirmRevocationCodestr != linker.LinkedAccount.RevocationCode)
                 {
-                    await DisplayAlert("Error", "Revocation code incorrect; the authenticator has not been linked.", "OK");
+                    await DisplayAlertAsync("Error", "Revocation code incorrect; the authenticator has not been linked.", "OK");
                     manifestFinal.RemoveAccount(linker.LinkedAccount);
                     await Navigation.PopAsync();
                     return;
@@ -389,7 +389,7 @@ namespace SMA.Pages
                 if (finalizeResponse == AuthenticatorLinker.FinalizeResult.UnableToGenerateCorrectCodes ||
                     finalizeResponse == AuthenticatorLinker.FinalizeResult.GeneralFailure)
                 {
-                    await DisplayAlert("Error", "Unable to finalize this authenticator. Write down your revocation code if possible: " + linker.LinkedAccount.RevocationCode, "OK");
+                    await DisplayAlertAsync("Error", "Unable to finalize this authenticator. Write down your revocation code if possible: " + linker.LinkedAccount.RevocationCode, "OK");
                     manifestFinal.RemoveAccount(linker.LinkedAccount);
                     await Navigation.PopAsync();
                     return;
@@ -397,7 +397,7 @@ namespace SMA.Pages
             }
 
             manifestFinal.SaveAccount(linker.LinkedAccount, passKey != null, passKey);
-            await DisplayAlert("Success", "Mobile authenticator successfully linked. Revocation code: " + linker.LinkedAccount.RevocationCode, "OK");
+            await DisplayAlertAsync("Success", "Mobile authenticator successfully linked. Revocation code: " + linker.LinkedAccount.RevocationCode, "OK");
             await Navigation.PopAsync();
         }
 
@@ -421,7 +421,7 @@ namespace SMA.Pages
                         passKey = passKeyForm.GetText();
                         passKeyValid = man.VerifyPasskey(passKey);
                         if (!passKeyValid)
-                            await DisplayAlert("Error", "That passkey is invalid. Please enter the same passkey you used for your other accounts.", "OK");
+                            await DisplayAlertAsync("Error", "That passkey is invalid. Please enter the same passkey you used for your other accounts.", "OK");
                     }
                     else
                     {
@@ -434,9 +434,9 @@ namespace SMA.Pages
 
             man.SaveAccount(account, passKey != null, passKey);
             if (IsRefreshing)
-                await DisplayAlert("Steam Login", "Your session was refreshed.", "OK");
+                await DisplayAlertAsync("Steam Login", "Your session was refreshed.", "OK");
             else
-                await DisplayAlert("Steam Login", "Mobile authenticator successfully linked. Revocation code: " + account.RevocationCode, "OK");
+                await DisplayAlertAsync("Steam Login", "Mobile authenticator successfully linked. Revocation code: " + account.RevocationCode, "OK");
         }
 
         public Task<bool> WaitForLoginAsync() => _tcs.Task;

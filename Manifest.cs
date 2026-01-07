@@ -67,7 +67,7 @@ namespace SMA
             // If there's no manifest, throw exception
             if (!File.Exists(manifestFile))
             {
-                throw new ManifestParseException();
+                GenerateNewManifest();
             }
 
             try

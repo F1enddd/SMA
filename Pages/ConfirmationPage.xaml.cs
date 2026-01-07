@@ -60,7 +60,7 @@ public partial class ConfirmationPage : ContentPage
                 {
                     Text = "Nothing to confirm/cancel",
                     HorizontalOptions = LayoutOptions.Center,
-                    TextColor = Colors.Black
+                    TextColor = Colors.White
                 });
                 return;
             }

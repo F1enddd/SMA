@@ -2,7 +2,7 @@
     x:Class="SMA.Pages.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Steam Desktop Authenticator"
+    Title="Steam Mobile Authenticator"
     BackgroundColor="#232323">
     
 
@@ -42,7 +42,7 @@
 
         <!-- Список аккаунтов -->
         <Frame Grid.Row="3" Margin="0,10,0,0" BorderColor="Gray" CornerRadius="10" BackgroundColor="#232323">
-            <Grid RowDefinitions="auto, *">
+            <Grid RowDefinitions="auto, *, auto">
                 <Label Text="Accounts" FontAttributes="Bold" Grid.Row="0"/>
                 <CollectionView x:Name="listAccounts"
                     SelectionMode="Single"
@@ -77,6 +77,8 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <Button Text="View Confirmations" x:Name="ViewConfirmations" Margin="5" Clicked="ViewConfirmations_Clicked" Grid.Row="2"/>
             </Grid>
         </Frame>
 
@@ -92,7 +94,7 @@
         <Grid Grid.Row="5" ColumnDefinitions="*,Auto" Margin="0,5,0,0">
 
             <Label x:Name="labelVersion"
-                   Text="v0.0.0"
+                   Text="v0.9beta"
                    FontSize="10"
                    TextColor="Gray"
                    HorizontalOptions="End"

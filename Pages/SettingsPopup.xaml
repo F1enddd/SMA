@@ -4,6 +4,8 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="SMA.Pages.SettingsPopup">
 
+        
+    
     <Frame BackgroundColor="#333333" 
            Padding="20" 
            CornerRadius="10" 
@@ -11,24 +13,32 @@
            HorizontalOptions="Center"
            VerticalOptions="Center">
 
-        <VerticalStackLayout Spacing="15" WidthRequest="350">
+        <VerticalStackLayout Spacing="15">
             <Grid RowSpacing="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <HorizontalStackLayout Grid.Row="0" Spacing="10">
-                    <CheckBox x:Name="chkPeriodicChecking" />
+                    <HorizontalStackLayout Grid.Row="0" Spacing="10" >
+                    <CheckBox x:Name="chkPeriodicChecking" CheckedChanged="chkPeriodicChecking_CheckedChanged"/>
                     <Label Text="Periodically check for new confirmations and show a popup when they arrive"
                            TextColor="White"
                            VerticalOptions="Center" 
-                           LineBreakMode="WordWrap"
-                           WidthRequest="300"/>
+                           LineBreakMode="WordWrap">
+                        <Label.WidthRequest>
+                            <OnPlatform x:TypeArguments="x:Double">
+                                <On Platform="Android" Value="200"/>
+                                <On Platform="iOS" Value="200"/>
+                                <On Platform="WinUI" Value="300"/>
+                                <On Platform="MacCatalyst" Value="350"/>
+                            </OnPlatform>
+                        </Label.WidthRequest>
+                    </Label>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Grid.Row="1" Spacing="10">
@@ -36,24 +46,61 @@
                              Minimum="5" 
                              Maximum="300" 
                              Increment="1"
+                             WidthRequest="70"
                              ValueChanged="Stepper_ValueChanged"/>
                     <Label x:Name="lblInterval" Text="Seconds between checking" TextColor="White"
-                           VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap"/>
+                           VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap">
+                        <Label.WidthRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="Android" Value="200"/>
+                            <On Platform="iOS" Value="200"/>
+                            <On Platform="WinUI" Value="350"/>
+                            <On Platform="MacCatalyst" Value="350"/>
+                        </OnPlatform>
+                        </Label.WidthRequest>
+                    </Label>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Grid.Row="2" Spacing="10">
                     <CheckBox x:Name="chkCheckAll"/>
-                    <Label Text="Check all accounts for confirmations" TextColor="White" VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap"/>
+                    <Label Text="Check all accounts for confirmations" TextColor="White" VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap">
+                        <Label.WidthRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="Android" Value="200"/>
+                            <On Platform="iOS" Value="200"/>
+                            <On Platform="WinUI" Value="350"/>
+                            <On Platform="MacCatalyst" Value="350"/>
+                        </OnPlatform>
+                        </Label.WidthRequest>
+                    </Label>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Grid.Row="3" Spacing="10">
-                    <CheckBox x:Name="chkConfirmMarket"/>
-                    <Label Text="Auto-confirm market transactions" TextColor="White" VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap"/>
+                    <CheckBox x:Name="chkConfirmMarket" CheckedChanged="chkConfirmMarket_CheckedChanged"/>
+                    <Label Text="Auto-confirm market transactions" TextColor="White" VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap">
+                        <Label.WidthRequest>
+                            <OnPlatform x:TypeArguments="x:Double">
+                                <On Platform="Android" Value="200"/>
+                                <On Platform="iOS" Value="200"/>
+                                <On Platform="WinUI" Value="350"/>
+                                <On Platform="MacCatalyst" Value="350"/>
+                            </OnPlatform>
+                        </Label.WidthRequest>
+                    </Label>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Grid.Row="4" Spacing="10">
-                    <CheckBox x:Name="chkConfirmTrades"/>
-                    <Label Text="Auto-confirm trades" TextColor="White" VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap"/>
+                    <CheckBox x:Name="chkConfirmTrades" CheckedChanged="chkConfirmTrades_CheckedChanged"/>
+                    <Label Text="Auto-confirm trades" TextColor="White" VerticalOptions="Center" VerticalTextAlignment="Center" LineBreakMode="WordWrap">
+                        <Label.WidthRequest>
+                            <OnPlatform x:TypeArguments="x:Double">
+                                <On Platform="Android" Value="200"/>
+                                <On Platform="iOS" Value="200"/>
+                                <On Platform="WinUI" Value="350"/>
+                                <On Platform="MacCatalyst" Value="350"/>
+                            </OnPlatform>
+                        </Label.WidthRequest>
+                    </Label>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Grid.Row="5" HorizontalOptions="End">
@@ -63,4 +110,5 @@
             </Grid>
         </VerticalStackLayout>
     </Frame>
+
 </toolkit:Popup>
